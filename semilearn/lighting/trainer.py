@@ -11,7 +11,6 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from semilearn.core.utils import get_optimizer, get_cosine_schedule_with_warmup, get_logger, EMA
 
 
-
 class Trainer:
     def __init__(self, config, algorithm, verbose=0):
         self.config = config
@@ -60,11 +59,11 @@ class Trainer:
                 if self.algorithm.it > self.config.num_train_iter:
                     break
 
-                self.call_hook('before_train_step')
+                self.algorithm.call_hook('before_train_step')
                 out_dict, log_dict = self.algorithm.train_step(**self.algorithm.process_batch(**data_lb, **data_ulb))
                 self.out_dict = out_dict
                 self.log_dict = log_dict
-                self.call_hook('after_train_step')
+                self.algorithm.call_hook('after_train_step')
 
                 bar.suffix = ("Iter: {batch:4}/{iter:4}.".format(batch=self.algorithm.it, iter=len(train_lb_loader)))
                 bar.next()
