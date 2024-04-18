@@ -61,8 +61,8 @@ class Trainer:
 
                 self.algorithm.call_hook('before_train_step')
                 out_dict, log_dict = self.algorithm.train_step(**self.algorithm.process_batch(**data_lb, **data_ulb))
-                self.out_dict = out_dict
-                self.log_dict = log_dict
+                self.algorithm.out_dict = out_dict
+                self.algorithm.log_dict = log_dict
                 self.algorithm.call_hook('after_train_step')
 
                 bar.suffix = ("Iter: {batch:4}/{iter:4}.".format(batch=self.algorithm.it, iter=len(train_lb_loader)))
