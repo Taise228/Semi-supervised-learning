@@ -69,8 +69,20 @@ class Trainer:
                 bar.next()
                 self.algorithm.it += 1
 
-                self.algorithm.call_hook('after_train_epoch')
             bar.finish()
+            self.algorithm.call_hook('after_train_epoch')
+
+            # validate
+            result = self.evaluate(eval_loader)
+
+            # save model
+            self.algorithm.save_model('latest_model.pth', self.save_path)
+
+            # best
+            if result['acc'] > self.algorithm.best_eval_acc:
+                self.algorithm.best_eval_acc = result['acc']
+                self.algorithm.best_epoch = self.algorithm.epoch
+                self.algorithm.save_model('best_model.pth', self.save_path)
 
         self.algorithm.call_hook('after_run')
         self.logger.info("Best acc {:.4f} at epoch {:d}".format(self.algorithm.best_eval_acc, self.algorithm.best_epoch))
