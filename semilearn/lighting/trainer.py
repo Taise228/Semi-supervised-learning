@@ -68,20 +68,11 @@ class Trainer:
                 bar.suffix = ("Iter: {batch:4}/{iter:4}.".format(batch=self.algorithm.it, iter=len(train_lb_loader)))
                 bar.next()
                 self.algorithm.it += 1
+
+                self.algorithm.call_hook('after_train_epoch')
             bar.finish()
 
-            # validate
-            result = self.evaluate(eval_loader)
-
-            # save model
-            self.algorithm.save_model('latest_model.pth', self.save_path)
-
-            # best
-            if result['acc'] > self.algorithm.best_eval_acc:
-                self.algorithm.best_eval_acc = result['acc']
-                self.algorithm.best_epoch = self.algorithm.epoch
-                self.algorithm.save_model('model_best.pth', self.save_path)
-        
+        self.algorithm.call_hook('after_run')
         self.logger.info("Best acc {:.4f} at epoch {:d}".format(self.algorithm.best_eval_acc, self.algorithm.best_epoch))
         self.logger.info("Training finished.")
 
