@@ -82,7 +82,7 @@ class Trainer:
             if result['acc'] > self.algorithm.best_eval_acc:
                 self.algorithm.best_eval_acc = result['acc']
                 self.algorithm.best_epoch = self.algorithm.epoch
-                self.algorithm.save_model('best_model.pth', self.save_path)
+                self.algorithm.save_model('model_best.pth', self.save_path)
 
         self.algorithm.call_hook('after_run')
         self.logger.info("Best acc {:.4f} at epoch {:d}".format(self.algorithm.best_eval_acc, self.algorithm.best_epoch))
